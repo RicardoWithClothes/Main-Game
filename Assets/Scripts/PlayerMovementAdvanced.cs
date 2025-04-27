@@ -10,7 +10,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
 
 
     [Header("Movement")]
-    private float moveSpeed;
+    public float moveSpeed;
     public float walkSpeed;
     public float sprintSpeed;
     public float groundDrag;
@@ -35,13 +35,15 @@ public class PlayerMovementAdvanced : MonoBehaviour
     [Header("Ground Check")]
     public float playerHeight;
     public LayerMask whatIsGround;
-    bool grounded;
+    public bool grounded;
 
 
     [Header("Slope Handling")]
     public float maxSlopeAngle;
     private RaycastHit slopeHit;
     private bool exitingSlope;
+    private bool forceCrouch;
+
 
     //For jump buffer + coyote time
     private float? lastGroundTime;
@@ -118,33 +120,60 @@ public class PlayerMovementAdvanced : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
-        // crouching
-        if(Input.GetKeyDown(crouchKey))
+        if (Input.GetKeyDown(crouchKey))
         {
-            transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
-            
-            rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+            Crouch();
         }
-        //stop crouching
-        if(Input.GetKeyUp(crouchKey))
+
+        // try to stop crouching
+        if (Input.GetKeyUp(crouchKey))
         {
             // Cast a ray upwards to check for ceiling
             float ceilingCheckDistance = (startYScale - crouchYScale) + 0.2f; // small buffer
             Vector3 raycastOrigin = transform.position + Vector3.up * (crouchYScale * 0.5f);
             bool ceilingBlocked = Physics.Raycast(raycastOrigin, Vector3.up, ceilingCheckDistance, whatIsGround);
-          
+
             if (!ceilingBlocked)
             {
-                // No ceiling above — can uncrouch
-                transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+                Uncrouch();
+            }
+            else
+            {
+                forceCrouch = true; // Still stuck under ceiling
             }
         }
     }
+    private void CheckCeiling()
+    {
+        if (!forceCrouch)
+            return;
 
+        float ceilingCheckDistance = (startYScale - crouchYScale) + 0.2f;
+        Vector3 raycastOrigin = transform.position + Vector3.up * (crouchYScale * 0.5f);
+        bool ceilingBlocked = Physics.Raycast(raycastOrigin, Vector3.up, ceilingCheckDistance, whatIsGround);
+
+        if (!ceilingBlocked)
+        {
+            // No longer blocked, we can stand up
+            Uncrouch();
+        }
+    }
+    private void Crouch()
+    {
+        transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
+        rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
+    }
+
+    private void Uncrouch()
+    {
+        transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+        forceCrouch = false;
+    }
     private void StateHandler()
     {
+        CheckCeiling();
         // MODE - crouching
-        if (Input.GetKey(crouchKey) && grounded)
+        if ((Input.GetKey(crouchKey) || forceCrouch) && grounded)
         {
             state = MovementState.crouching;
             moveSpeed = crouchSpeed;
