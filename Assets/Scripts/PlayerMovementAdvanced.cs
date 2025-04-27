@@ -37,6 +37,7 @@ public class PlayerMovementAdvanced : MonoBehaviour
     public LayerMask whatIsGround;
     bool grounded;
 
+
     [Header("Slope Handling")]
     public float maxSlopeAngle;
     private RaycastHit slopeHit;
@@ -127,7 +128,16 @@ public class PlayerMovementAdvanced : MonoBehaviour
         //stop crouching
         if(Input.GetKeyUp(crouchKey))
         {
-            transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+            // Cast a ray upwards to check for ceiling
+            float ceilingCheckDistance = (startYScale - crouchYScale) + 0.2f; // small buffer
+            Vector3 raycastOrigin = transform.position + Vector3.up * (crouchYScale * 0.5f);
+            bool ceilingBlocked = Physics.Raycast(raycastOrigin, Vector3.up, ceilingCheckDistance, whatIsGround);
+          
+            if (!ceilingBlocked)
+            {
+                // No ceiling above — can uncrouch
+                transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
+            }
         }
     }
 

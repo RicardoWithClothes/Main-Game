@@ -5,7 +5,7 @@ public class CameraHeadBob : MonoBehaviour
 {
 
     [Range(0.01f, 0.1f)]
-    public float Amount = 0.02f;
+    public float Amount = 0.07f;
 
     [Range(1f, 30f)]
     public float Frequency = 10f;
