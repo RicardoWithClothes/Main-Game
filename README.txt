@@ -1,19 +1,13 @@
-The goal of this thing is to learn, and the nymn horror game competition in September 2024. 
+The goal of this thing is to learn, and perhaps be satisfied with the end product. 
 
-Horror game, September deadline I believe.
+Cycling game, racing, satisfying first person
+
 IDEAS: 
--3d?
--you see yourself as a bean in a mirror
--identity crises
--clone
--forsen
-
-
-FEATURE:
-Screenshake
-stamina
-map
-lighting
+bike first (<- not even at the start of this rn)
+gears
+map gen 
+weather
+items
 
 THE FOLLOWING images are the setting for the move script and stuff:
 -Player scripts https://imgur.com/a/u4OfSet
