@@ -21,5 +21,18 @@ public class FlashLightController : MonoBehaviour
 
         // Interpolate the flashlight rotation towards the target rotation
         transform.localRotation = Quaternion.Lerp(transform.localRotation, targetRotation, Time.deltaTime * lagSpeed);
+        if (Input.GetKeyDown(KeyCode.F))
+        {
+            ToggleFlashlight();
+        }
+    }
+    private void ToggleFlashlight()
+    {
+        // Toggle the flashlight on/off
+        Light flashlight = GetComponent<Light>();
+        if (flashlight != null)
+        {
+            flashlight.enabled = !flashlight.enabled;
+        }
     }
 }
