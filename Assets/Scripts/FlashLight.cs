@@ -7,7 +7,6 @@ public class FlashLightController : MonoBehaviour
     public CameraController cameraController; // Reference to the camera controller script
     public float flashlightOffset = 0f; // Offset if you want to adjust the flashlight's starting position
     public float lagSpeed = 5f; // Speed of the lag (higher value = less lag)
-
     private Quaternion targetRotation;
 
     void Update()

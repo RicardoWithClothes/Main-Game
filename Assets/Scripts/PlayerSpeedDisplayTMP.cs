@@ -12,7 +12,7 @@ public class PlayerSpeedDisplayTMP : MonoBehaviour
     void Update()
     {
         // Calculate the speed
-        float speed = playerRigidbody.velocity.magnitude;
+        float speed = playerRigidbody.linearVelocity.magnitude;
 
         // Update the TMP text with the speed
         speedText.text = "Speed: " + speed.ToString("F2");

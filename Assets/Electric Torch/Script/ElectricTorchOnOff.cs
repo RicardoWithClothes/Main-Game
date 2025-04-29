@@ -33,10 +33,10 @@ public class ElectricTorchOnOff : MonoBehaviour
 	[SerializeField] float _lightTime = 0.05f;
 
 
-	private void Awake()
+    private void Awake()
     {
-		_batteryPower = FindObjectOfType<BatteryPowerPickup>();
-	}
+        _batteryPower = Object.FindFirstObjectByType<BatteryPowerPickup>();
+    }
     void Start()
 	{
 		GameObject _scriptControllerEmissionFade = GameObject.Find("default");

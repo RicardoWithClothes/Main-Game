@@ -1,4 +1,3 @@
-using Cinemachine;
 using System;
 using UnityEngine;
 using UnityEngine.Events;
@@ -27,7 +26,7 @@ public class CameraHeadBob : MonoBehaviour
     void Start()
     {
         originalLocalPosition = transform.localPosition;
-        playerMovement = FindObjectOfType<PlayerMovementAdvanced>();
+        playerMovement = UnityEngine.Object.FindFirstObjectByType<PlayerMovementAdvanced>(); // Explicitly specify UnityEngine.Object
     }
 
     void Update()
@@ -52,7 +51,7 @@ public class CameraHeadBob : MonoBehaviour
         float moveSpeed = playerMovement.moveSpeed;
         float dynamicFrequency = baseFrequency * (moveSpeed / playerMovement.walkSpeed);
         float dynamicAmount = baseAmount * (moveSpeed / playerMovement.walkSpeed);
- 
+
 
         Vector3 pos = Vector3.zero;
         pos.y += Mathf.Lerp(pos.y, Mathf.Sin(Time.time * dynamicFrequency) * dynamicAmount * 1.4f, Smooth * Time.deltaTime);
