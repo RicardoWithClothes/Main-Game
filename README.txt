@@ -3,9 +3,9 @@ The goal of this thing is to learn, and perhaps be satisfied with the end produc
 Cycling game, racing, satisfying first person
 
 IDEAS: 
-bike first (<- not even at the start of this rn)
+map gen (<- currently making a better environment for biking)
+bike physics lol
 gears
-map gen 
 weather
 items
 
