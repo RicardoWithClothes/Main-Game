@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using UnityEngine.Events;
+using UnityEngine.InputSystem;
 
 public class CameraHeadBob : MonoBehaviour
 {
@@ -13,9 +14,10 @@ public class CameraHeadBob : MonoBehaviour
     [Range(10f, 100f)]
     public float Smooth = 10.0f;
 
-    private Vector3 originalLocalPosition;
+    [Header("Input Settings")]
+    public InputActionReference moveAction;
 
-    // CHANGE 1: Reference the NEW controller
+    private Vector3 originalLocalPosition;
     private PlayerController playerController;
 
     public UnityEvent onFootStep;
@@ -40,13 +42,12 @@ public class CameraHeadBob : MonoBehaviour
     {
         if (playerController == null) return;
 
-        // Check input magnitude (are we trying to move?)
-        float inputMagnitude = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")).magnitude;
-
-        // CHANGE 3: Update variable names to match the new system
-        // We use the helper property "IsCrouching" we just added
-        if (inputMagnitude > 0 && !playerController.IsCrouching && playerController.isGrounded)
-        {
+        Vector2 moveInput = Vector2.zero;
+        if (moveAction != null && moveAction.action != null) {
+            moveInput = moveAction.action.ReadValue<Vector2>();
+        }
+        float inputMagnitude = moveInput.magnitude;
+        if (inputMagnitude > 0 && !playerController.IsCrouching && playerController.isGrounded) {
             StartHeadBob();
         }
     }

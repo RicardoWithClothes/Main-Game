@@ -1,20 +1,17 @@
-using Palmmedia.ReportGenerator.Core.Parser.Analysis;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class PlayerSpeedDisplayTMP : MonoBehaviour
-{
-    public Rigidbody playerRigidbody; // Reference to the player's Rigidbody
-    public TMP_Text speedText; // Reference to the TextMeshPro UI Text component
+public class PlayerSpeedDisplayTMP : MonoBehaviour {
+    public Rigidbody playerRigidbody;
+    public TMP_Text speedText;
 
-    void Update()
-    {
-        // Calculate the speed
+    void Update() {
+        if (playerRigidbody == null || speedText == null) return;
+
         float speed = playerRigidbody.linearVelocity.magnitude;
 
-        // Update the TMP text with the speed
-        speedText.text = "Speed: " + speed.ToString("F2");
+        // NEW: Zero memory allocation! TMP handles the formatting internally.
+        // {0:F2} means "Take the first variable (speed) and format it to 2 decimal places"
+        speedText.SetText("Speed: {0:F2}", speed);
     }
 }

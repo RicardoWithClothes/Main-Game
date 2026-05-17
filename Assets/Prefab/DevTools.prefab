@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &8477642345440466967
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8917851844006693746}
+  - component: {fileID: 1865785958500659258}
+  m_Layer: 0
+  m_Name: DevTools
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8917851844006693746
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8477642345440466967}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 410.2525, y: 9.03049, z: 174.67995}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1865785958500659258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8477642345440466967}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9305da893ebd0134f84cb0634bc19725, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DevCamera
+  playerCamera: {fileID: 0}
+  devCamera: {fileID: 0}
+  playerMovement: {fileID: 0}
+  mouseLook: {fileID: 0}
+  flySpeed: 20
+  sprintMultiplier: 3
+  toggleAction: {fileID: -7541138464017040678, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}
+  moveAction: {fileID: -6059242725153175654, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}
+  elevateAction: {fileID: -7541138464017040678, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}
+  lookAction: {fileID: 4818588436822421807, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}
+  sprintAction: {fileID: 5406108698861317716, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}

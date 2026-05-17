@@ -1,104 +1,110 @@
 using UnityEngine;
+using UnityEngine.InputSystem;
 
-public class DevCamera : MonoBehaviour
-{
-    [Header("References")]
-    public Transform playerCameraHolder; // The empty object inside Player where camera normally sits
-    public PlayerController playerMovement; // Your movement script
-    public CameraController mouseLook; // Your mouse look script (so we can turn it off)
+public class DevCamera : MonoBehaviour {
+    [Header("Camera Toggling")]
+    public Camera playerCamera; // The camera attached to your player
+    public Camera devCamera;    // A separate camera placed anywhere in the scene
+
+    [Header("Player Scripts")]
+    public PlayerController playerMovement;
+    public CameraController mouseLook;
 
     [Header("Settings")]
     public float flySpeed = 20f;
     public float sprintMultiplier = 3f;
-    public KeyCode toggleKey = KeyCode.Tab;
 
-    private Camera mainCam;
+    [Header("Input Actions")]
+    public InputActionReference toggleAction;  // Tab key
+    public InputActionReference moveAction;    // Vector2 (WASD)
+    public InputActionReference elevateAction; // 1D Axis (Q/E)
+    public InputActionReference lookAction;    // Vector2 (Mouse Delta)
+    public InputActionReference sprintAction;  // Button (Left Shift)
+
     private bool isDevMode = false;
     private float yaw = 0f;
     private float pitch = 0f;
 
-    void Start()
-    {
-        mainCam = Camera.main;
+    private void Start() {
+        // Start game with DevCam off and PlayerCam on
+        devCamera.enabled = false;
+        playerCamera.enabled = true;
 
-        // Initialize angles to current camera rotation so it doesn't snap weirdly
-        yaw = mainCam.transform.eulerAngles.y;
-        pitch = mainCam.transform.eulerAngles.x;
+        yaw = devCamera.transform.eulerAngles.y;
+        pitch = devCamera.transform.eulerAngles.x;
     }
 
-    void Update()
-    {
-        if (Input.GetKeyDown(toggleKey))
-        {
+    private void Update() {
+        // 1. Toggle Mode
+        if (toggleAction != null && toggleAction.action.WasPressedThisFrame()) {
             ToggleDevMode();
         }
 
-        if (isDevMode)
-        {
+        // 2. Handle Flying Logic (Only if active)
+        if (isDevMode) {
             MoveCamera();
             RotateCamera();
         }
     }
 
-    void ToggleDevMode()
-    {
+    private void ToggleDevMode() {
         isDevMode = !isDevMode;
 
-        // 1. Disable/Enable Player Controls
+        // Turn scripts on/off
         if (playerMovement != null) playerMovement.enabled = !isDevMode;
         if (mouseLook != null) mouseLook.enabled = !isDevMode;
 
-        if (!isDevMode)
-        {
-            // --- RETURN TO PLAYER ---
-            // Re-parent camera to the player
-            mainCam.transform.SetParent(playerCameraHolder);
+        // Swap Cameras!
+        playerCamera.enabled = !isDevMode;
+        devCamera.enabled = isDevMode;
 
-            // Reset position to exact zero (local to the holder)
-            mainCam.transform.localPosition = Vector3.zero;
-            mainCam.transform.localRotation = Quaternion.identity;
+        if (isDevMode) {
+            // Optional: Snap the dev camera to the player's head when activated
+            devCamera.transform.position = playerCamera.transform.position;
+            devCamera.transform.rotation = playerCamera.transform.rotation;
 
-            // Lock cursor again
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
-        }
-        else
-        {
-            // --- ENTER GOD MODE ---
-            // Detach camera so it can fly freely
-            mainCam.transform.SetParent(null);
-
-            // Unlock cursor (optional, but usually better to keep locked for flying)
-            Cursor.lockState = CursorLockMode.Locked;
-            Cursor.visible = false;
+            yaw = devCamera.transform.eulerAngles.y;
+            pitch = devCamera.transform.eulerAngles.x;
         }
     }
 
-    void MoveCamera()
-    {
-        float speed = flySpeed * (Input.GetKey(KeyCode.LeftShift) ? sprintMultiplier : 1f);
-        Vector3 move = Vector3.zero;
+    private void MoveCamera() {
+        // Read Inputs
+        Vector2 moveInput = moveAction.action.ReadValue<Vector2>();
+        float elevateInput = elevateAction.action.ReadValue<float>();
+        bool isSprinting = sprintAction.action.IsPressed();
 
-        // Standard WASD + Q/E for Up/Down
-        if (Input.GetKey(KeyCode.W)) move += mainCam.transform.forward;
-        if (Input.GetKey(KeyCode.S)) move -= mainCam.transform.forward;
-        if (Input.GetKey(KeyCode.D)) move += mainCam.transform.right;
-        if (Input.GetKey(KeyCode.A)) move -= mainCam.transform.right;
-        if (Input.GetKey(KeyCode.E)) move += Vector3.up;
-        if (Input.GetKey(KeyCode.Q)) move -= Vector3.down;
+        float speed = flySpeed * (isSprinting ? sprintMultiplier : 1f);
 
-        mainCam.transform.position += move * speed * Time.deltaTime;
+        // Calculate direction relative to where the dev camera is looking
+        Vector3 moveDir = (devCamera.transform.forward * moveInput.y) +
+                          (devCamera.transform.right * moveInput.x) +
+                          (Vector3.up * elevateInput);
+
+        devCamera.transform.position += moveDir * speed * Time.deltaTime;
     }
 
-    void RotateCamera()
-    {
-        float mouseX = Input.GetAxis("Mouse X") * 2f;
-        float mouseY = Input.GetAxis("Mouse Y") * 2f;
+    private void RotateCamera() {
+        Vector2 lookInput = lookAction.action.ReadValue<Vector2>();
 
-        yaw += mouseX;
-        pitch -= mouseY;
+        yaw += lookInput.x;
+        pitch -= lookInput.y;
         pitch = Mathf.Clamp(pitch, -90f, 90f);
 
-        mainCam.transform.eulerAngles = new Vector3(pitch, yaw, 0f);
+        devCamera.transform.eulerAngles = new Vector3(pitch, yaw, 0f);
+    }
+    private void OnEnable() {
+        if (toggleAction != null) toggleAction.action.Enable();
+        if (moveAction != null) moveAction.action.Enable();
+        if (elevateAction != null) elevateAction.action.Enable();
+        if (lookAction != null) lookAction.action.Enable();
+        if (sprintAction != null) sprintAction.action.Enable();
+    }
+    private void OnDisable() {
+        if (toggleAction != null) toggleAction.action.Disable();
+        if (moveAction != null) moveAction.action.Disable();
+        if (elevateAction != null) elevateAction.action.Disable();
+        if (lookAction != null) lookAction.action.Disable();
+        if (sprintAction != null) sprintAction.action.Disable();
     }
 }

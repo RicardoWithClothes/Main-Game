@@ -1,0 +1,325 @@
+{
+    "version": 1,
+    "name": "PlayerControls",
+    "maps": [
+        {
+            "name": "Move",
+            "id": "a1514d08-cd9c-48dc-b196-56705cd1a2eb",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Value",
+                    "id": "5adf865e-84b6-486f-b951-fd1a9f8c7259",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "WASD",
+                    "id": "870a810c-9c4a-4357-84dd-a96f0c9d8e5a",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "up",
+                    "id": "d782fb4c-1618-4bee-b8e4-b48306d6ca21",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "down",
+                    "id": "95795ab8-18f7-4a13-b951-4056970d78e8",
+                    "path": "<Keyboard>/s",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "left",
+                    "id": "c599afff-1c63-4fb7-8955-99d74c42d5cb",
+                    "path": "<Keyboard>/a",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "right",
+                    "id": "e0feceb0-afa0-4dc5-b671-fe9c344d53b7",
+                    "path": "<Keyboard>/d",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "Jump",
+            "id": "f95fa311-6007-4597-bd90-1246e9c4a497",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "66aac092-bbc5-49ae-b841-f4c098c55dbd",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "a19a371a-a861-4867-b6db-e354b5101b33",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Crouch",
+            "id": "9629793c-5293-4dd0-9d0b-3370ad641522",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "18c8162d-6250-4ace-91f8-38cc99835a24",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "870ae21f-9a7e-4216-b8e9-295983323dfd",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Sprint",
+            "id": "90b728ec-fe0d-40e6-bc45-b118cc8e8e8a",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "b4a5a4d9-7dcb-462f-b784-25ddb29e2029",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "1d772811-06d6-40e0-bd5c-a2bd41064f53",
+                    "path": "<Keyboard>/shift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Camera",
+            "id": "a5c6b301-2dda-4f66-b385-1ba75f66a18e",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Value",
+                    "id": "e2cef25a-91c4-4ebc-8da3-d6b91498c4c8",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "4570cd11-5b0d-43f4-8e47-183ab61ad750",
+                    "path": "<Mouse>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Flashlight",
+            "id": "dc83b04b-136b-49ea-a00d-a1d78e45f7e3",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "60d07e10-5b64-426c-85c2-50190b4cf728",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "b15cba64-bec2-4778-b655-f80f2fed7bcb",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "Elevate",
+            "id": "7254e7e6-d7a6-4a9c-952b-071aa55ae36d",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Value",
+                    "id": "cfa347aa-2859-4234-a7ac-e8a81b4c00d9",
+                    "expectedControlType": "Axis",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "1D Axis",
+                    "id": "fa0f5b9e-ca91-41d8-aa88-f20877c95f58",
+                    "path": "1DAxis",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": true,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "negative",
+                    "id": "d2423d83-37cf-484e-a59c-8f1babc20340",
+                    "path": "<Keyboard>/ctrl",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "positive",
+                    "id": "84146f8d-bd2c-46b5-a85b-68820036e86c",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                }
+            ]
+        },
+        {
+            "name": "Scream",
+            "id": "b408ae14-6bc7-4522-b13b-2f23367a2953",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "099a41da-3437-4442-8ab9-58cf3debc6f2",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "c547e5b6-4320-4fc9-9df6-e26f5ec2e1a3",
+                    "path": "<Keyboard>/g",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        },
+        {
+            "name": "ToggleDevMode",
+            "id": "08debb2b-2015-4266-976b-a38ce8bcdbf2",
+            "actions": [
+                {
+                    "name": "New action",
+                    "type": "Button",
+                    "id": "02648354-17ed-4d97-9486-eefa707db26f",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "ef89088d-4142-4e2a-a65a-0d59936e8f4d",
+                    "path": "<Keyboard>/f7",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "New action",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
