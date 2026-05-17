@@ -1,14 +1,7 @@
-The goal of this thing is to learn, and perhaps be satisfied with the end product. 
-
-Cycling game, racing, satisfying first person
+Want to make fun visual experience, and I woona learn ML and CG
 
 IDEAS: 
-map gen (<- currently making a better environment for biking)
-bike physics lol
-gears
-weather
-items
-
-THE FOLLOWING images are the setting for the move script and stuff:
--Player scripts https://imgur.com/a/u4OfSet
--Something https://imgur.com/a/ooN3CFK
+Movement
+procedurally generated dowhill map (<- currently making a better environment for biking)
+Bike
+Roguelike elements
