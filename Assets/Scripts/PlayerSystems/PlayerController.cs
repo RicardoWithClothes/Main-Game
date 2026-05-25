@@ -128,7 +128,8 @@ public class PlayerController : MonoBehaviour
 
     private void GroundCheck()
     {
-        isGrounded = Physics.Raycast(transform.position, Vector3.down, stats.playerHeight * 0.5f + 0.3f, stats.whatIsGround);
+        // CHECK THIS, might have to change so that it is not jumping of everything. just ground. whatIsGround. removed the layer restriction so that i dont have to change other code for mesh children thing.
+        isGrounded = Physics.Raycast(transform.position, Vector3.down, stats.playerHeight * 0.5f + 0.3f, Physics.DefaultRaycastLayers);
 
         // Handle Drag
         if (isGrounded) rb.linearDamping = stats.groundDrag;

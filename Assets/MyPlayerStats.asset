@@ -12,18 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03da9c523c1b36748bb815accd2bda1a, type: 3}
   m_Name: MyPlayerStats
   m_EditorClassIdentifier: 
-  walkSpeed: 7
+  walkSpeed: 189.5
   sprintSpeed: 10
   groundDrag: 5
   airMultiplier: 0.4
-  jumpForce: 12
+  jumpForce: 110.7
   jumpCooldown: 0.25
   crouchSpeed: 3.5
   crouchYScale: 0.5
   startYScale: 1
-  maxSlideTime: 0.75
-  slideForce: 200
-  slideYScale: 0.5
   playerHeight: 2
   whatIsGround:
     serializedVersion: 2

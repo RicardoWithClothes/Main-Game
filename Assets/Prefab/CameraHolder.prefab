@@ -388,8 +388,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lookAction: {fileID: 4818588436822421807, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}
-  sensX: 400
-  sensY: 400
+  sensX: 0.2
+  sensY: 0.2
   orientation: {fileID: 0}
 --- !u!114 &4494248712681784597
 MonoBehaviour:

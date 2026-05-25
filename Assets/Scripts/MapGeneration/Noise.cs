@@ -1,6 +1,9 @@
-using UnityEngine;
 using System.Collections;
+using UnityEngine;
+using UnityEngine.SocialPlatforms;
 
+
+// keep the noise down bro
 public static class Noise {
 
     public enum NormalizeMode { Local, Global };
@@ -62,7 +65,7 @@ public static class Noise {
                 noiseMap[x, y] = noiseHeight;
             }
         }
-
+        // normalization noise map.
         for (int y = 0; y < mapHeight; y++) {
             for (int x = 0; x < mapWidth; x++) {
                 if (normalizeMode == NormalizeMode.Local) {
@@ -70,6 +73,7 @@ public static class Noise {
                 }
                 else {
                     float normalizedHeight = (noiseMap[x, y] + 1) / (maxPossibleHeight / 0.9f);
+
                     noiseMap[x, y] = Mathf.Clamp(normalizedHeight, 0, int.MaxValue);
                 }
             }

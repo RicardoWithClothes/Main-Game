@@ -7093,7 +7093,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2df71608580dcde4b9af40a1de8747e7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  screamKey: 103
+  screamAction: {fileID: 0}
   screamer: {fileID: 703509444}
   cameraShake: {fileID: 963194230}
 --- !u!4 &888609868
@@ -11035,29 +11035,13 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 963194229}
     - target: {fileID: 1865785958500659258, guid: 3bf252c98e7f9fd4ea07c4e2999746f8, type: 3}
-      propertyPath: lookAction
-      value: 
-      objectReference: {fileID: 4818588436822421807, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}
-    - target: {fileID: 1865785958500659258, guid: 3bf252c98e7f9fd4ea07c4e2999746f8, type: 3}
-      propertyPath: moveAction
-      value: 
-      objectReference: {fileID: -6059242725153175654, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}
-    - target: {fileID: 1865785958500659258, guid: 3bf252c98e7f9fd4ea07c4e2999746f8, type: 3}
       propertyPath: playerCamera
       value: 
       objectReference: {fileID: 963194227}
     - target: {fileID: 1865785958500659258, guid: 3bf252c98e7f9fd4ea07c4e2999746f8, type: 3}
-      propertyPath: sprintAction
-      value: 
-      objectReference: {fileID: 5406108698861317716, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}
-    - target: {fileID: 1865785958500659258, guid: 3bf252c98e7f9fd4ea07c4e2999746f8, type: 3}
       propertyPath: toggleAction
       value: 
       objectReference: {fileID: -7021636981174335638, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}
-    - target: {fileID: 1865785958500659258, guid: 3bf252c98e7f9fd4ea07c4e2999746f8, type: 3}
-      propertyPath: elevateAction
-      value: 
-      objectReference: {fileID: -7541138464017040678, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}
     - target: {fileID: 1865785958500659258, guid: 3bf252c98e7f9fd4ea07c4e2999746f8, type: 3}
       propertyPath: playerMovement
       value: 

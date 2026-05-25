@@ -50,7 +50,7 @@ MonoBehaviour:
   mouseLook: {fileID: 0}
   flySpeed: 20
   sprintMultiplier: 3
-  toggleAction: {fileID: -7541138464017040678, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}
+  toggleAction: {fileID: -7021636981174335638, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}
   moveAction: {fileID: -6059242725153175654, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}
   elevateAction: {fileID: -7541138464017040678, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}
   lookAction: {fileID: 4818588436822421807, guid: 9e881c56fb3ef6b48919bd31a3663aab, type: 3}
