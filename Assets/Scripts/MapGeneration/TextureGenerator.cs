@@ -12,19 +12,35 @@ public static class TextureGenerator {
 		return texture;
 	}
 
+    // wow wtf happening? 
+    public static Texture2D TextureFromHeightMap(TerrainPoint[,] heightMap) {
+        int width = heightMap.GetLength(0);
+        int height = heightMap.GetLength(1);
 
-	public static Texture2D TextureFromHeightMap(float[,] heightMap) {
-		int width = heightMap.GetLength (0);
-		int height = heightMap.GetLength (1);
+        Color[] colourMap = new Color[width * height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                // Read from the .finalHeight of the struct!
+                colourMap[y * width + x] = Color.Lerp(Color.black, Color.white, heightMap[x, y].finalHeight);
+            }
+        }
 
-		Color[] colourMap = new Color[width * height];
-		for (int y = 0; y < height; y++) {
-			for (int x = 0; x < width; x++) {
-				colourMap [y * width + x] = Color.Lerp (Color.black, Color.white, heightMap [x, y]);
-			}
-		}
+        return TextureFromColourMap(colourMap, width, height);
+    }
 
-		return TextureFromColourMap (colourMap, width, height);
-	}
+    // Version 2: For raw float grids (Used by DrawMode.FalloffMap)
+    public static Texture2D TextureFromHeightMap(float[,] heightMap) {
+        int width = heightMap.GetLength(0);
+        int height = heightMap.GetLength(1);
+
+        Color[] colourMap = new Color[width * height];
+        for (int y = 0; y < height; y++) {
+            for (int x = 0; x < width; x++) {
+                colourMap[y * width + x] = Color.Lerp(Color.black, Color.white, heightMap[x, y]);
+            }
+        }
+
+        return TextureFromColourMap(colourMap, width, height);
+    }
 
 }

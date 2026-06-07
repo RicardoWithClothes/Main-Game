@@ -6,6 +6,10 @@ using System.Collections.Generic;
 using System.Runtime.InteropServices.WindowsRuntime;
 using UnityEngine.Serialization;
 
+using UnityEngine.Splines;
+using Unity.Mathematics;
+
+
 // The mesh generator, takes the noise map, and makes mesh. Also multithreads.
 public class MapGenerator : MonoBehaviour {
 
@@ -46,7 +50,8 @@ public class MapGenerator : MonoBehaviour {
     Queue<MapThreadInfo<MeshData>> meshDataThreadInfoQueue = new Queue<MapThreadInfo<MeshData>>();
 
     void Awake() {
-        falloffMap = FalloffGenerator.GenerateFalloffMap(mapChunkSize);
+        // + 2 for border
+        falloffMap = FalloffGenerator.GenerateFalloffMap(mapChunkSize + 2);
     }
 
     public static int mapChunkSize
@@ -82,7 +87,7 @@ public class MapGenerator : MonoBehaviour {
             display.DrawMesh(MeshGenerator.GenerateTerrainMesh(mapData.heightMap, meshHeightMultiplier, meshHeightCurve, editorPreviewLOD, useFlatShading, useSlope, slopeSteepness, mapData.centre), TextureGenerator.TextureFromColourMap(mapData.colourMap, mapChunkSize, mapChunkSize));
         }
         else if (drawMode == DrawMode.FalloffMap) {
-            display.DrawTexture(TextureGenerator.TextureFromHeightMap(FalloffGenerator.GenerateFalloffMap(mapChunkSize)));
+            display.DrawTexture(TextureGenerator.TextureFromHeightMap(FalloffGenerator.GenerateFalloffMap(mapChunkSize + 2)));
         }
     }
 
@@ -138,20 +143,29 @@ public class MapGenerator : MonoBehaviour {
 
     // The math
     MapData GenerateMapData(Vector2 centre) {
-        float[,] noiseMap = Noise.GenerateNoiseMap(mapChunkSize + 2, mapChunkSize + 2, seed, noiseScale, octaves, persistence, lacunarity, centre + offset, normalizeMode);
+        TerrainPoint[,] terrainGrid = Noise.GenerateNoiseMap(mapChunkSize + 2, mapChunkSize + 2, seed, noiseScale, octaves, persistence, lacunarity, centre + offset, normalizeMode);
+
+        // falloff only
+        if (useFalloff) {
+            for (int y = 0; y < mapChunkSize + 2; y++) {
+                for (int x = 0; x < mapChunkSize + 2; x++) {
+
+                    TerrainPoint currentPoint = terrainGrid[x, y];
+
+                    // 2. Modify the values on the copy
+                    currentPoint.finalHeight = Mathf.Clamp01(currentPoint.finalHeight - falloffMap[x, y]);
+                    currentPoint.pathInfluence = falloffMap[x, y]; // Track this for later use!
+
+                    // 3. Put the modified copy back into the grid
+                    terrainGrid[x, y] = currentPoint;
+                }
+            }
+        }
 
         Color[] colourMap = new Color[mapChunkSize * mapChunkSize];
         for (int y = 0; y < mapChunkSize; y++) {
             for (int x = 0; x < mapChunkSize; x++) {
-                float currentHeight = noiseMap[x + 1, y + 1];
-                if (useFalloff)
-                {
-                    currentHeight -= falloffMap[x, y];
-                    // CHECK THIS
-                    // noiseMap[x, y] = Mathf.Clamp01(noiseMap[x, y] - falloffMap[x, y]);
-                    // noiseMap[x, y] -= falloffMap[x, y];
-                }
-
+                float currentHeight = terrainGrid[x + 1, y + 1].finalHeight;
                 for (int i = 0; i < regions.Length; i++) {
                     if (currentHeight >= regions[i].height) {
                         colourMap[y * mapChunkSize + x] = regions[i].colour;
@@ -164,7 +178,7 @@ public class MapGenerator : MonoBehaviour {
         }
 
 
-        return new MapData(noiseMap, colourMap, centre);
+        return new MapData(terrainGrid, colourMap, centre);
     }
 
     void OnValidate() {
@@ -175,7 +189,7 @@ public class MapGenerator : MonoBehaviour {
             octaves = 0;
         }
 
-        falloffMap = FalloffGenerator.GenerateFalloffMap(mapChunkSize);
+        falloffMap = FalloffGenerator.GenerateFalloffMap(mapChunkSize + 2);
     }
 
     struct MapThreadInfo<T> {
@@ -197,13 +211,19 @@ public struct TerrainType {
     public float height;
     public Color colour;
 }
+public struct TerrainPoint {
+    public float baseNoiseHeight; // The raw mountain
+    public float finalHeight;     // The height after slopes and valleys
+    public float pathInfluence;   // 0 = Mountains, 1 = Center of the road
+    // You can add 'Color vertexColor' or 'int biomeIndex' here later!
+}
 
 public struct MapData {
-    public readonly float[,] heightMap;
+    public readonly TerrainPoint[,] heightMap;
     public readonly Color[] colourMap;
     public readonly Vector2 centre;
 
-    public MapData(float[,] heightMap, Color[] colourMap, Vector2 centre) {
+    public MapData(TerrainPoint[,] heightMap, Color[] colourMap, Vector2 centre) {
         this.heightMap = heightMap;
         this.colourMap = colourMap;
         this.centre = centre;

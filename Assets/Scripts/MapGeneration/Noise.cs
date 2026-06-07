@@ -8,7 +8,8 @@ public static class Noise {
 
     public enum NormalizeMode { Local, Global };
 
-    public static float[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, NormalizeMode normalizeMode) {
+    public static TerrainPoint[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, NormalizeMode normalizeMode) {
+
         float[,] noiseMap = new float[mapWidth, mapHeight];
 
         System.Random prng = new System.Random(seed);
@@ -66,20 +67,30 @@ public static class Noise {
             }
         }
         // normalization noise map.
+        TerrainPoint[,] terrainGrid = new TerrainPoint[mapWidth, mapHeight];
+
         for (int y = 0; y < mapHeight; y++) {
             for (int x = 0; x < mapWidth; x++) {
+
+                float normalizedHeight = 0f;
                 if (normalizeMode == NormalizeMode.Local) {
-                    noiseMap[x, y] = Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap[x, y]);
+                    normalizedHeight = Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap[x, y]);
                 }
                 else {
-                    float normalizedHeight = (noiseMap[x, y] + 1) / (maxPossibleHeight / 0.9f);
-
-                    noiseMap[x, y] = Mathf.Clamp(normalizedHeight, 0, int.MaxValue);
+                    float rawNormalized = (noiseMap[x, y] + 1) / (maxPossibleHeight / 0.9f);
+                    normalizedHeight = Mathf.Clamp(rawNormalized, 0, int.MaxValue);
                 }
+
+                TerrainPoint point = new TerrainPoint();
+                point.baseNoiseHeight = normalizedHeight; // Store the raw mountain height
+                point.finalHeight = normalizedHeight;     // They start the same before carving
+                point.pathInfluence = 0f;                 // Default to no path nearby
+
+                terrainGrid[x, y] = point;
             }
         }
 
-        return noiseMap;
+        return terrainGrid;
     }
 
 }

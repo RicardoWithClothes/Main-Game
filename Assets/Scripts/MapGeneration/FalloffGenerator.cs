@@ -4,29 +4,38 @@ using System.Collections;
 public static class FalloffGenerator {
 
     public static float[,] GenerateFalloffMap(int size) {
+        float flatRoadWidth = 0.001f;   
+        float totalValleyWidth = 0.2f; 
+
         float[,] map = new float[size, size];
 
         for (int i = 0; i < size; i++) {
             for (int j = 0; j < size; j++)
             {
-                float x = i / (float)size* 2 - 1;
-                float y = j / (float)size  * 2 - 1;
-                float value = Mathf.Max(Mathf.Abs(x), Mathf.Abs(y));
-                // Create a diagonal slope: high at (0,0), low at (1,1)
-                // float value = (x + y) / 2f;
-                map[i, j] = Evaluate(value);
+                
+                float x = i / (float)size * 2 - 1;
+
+                float distanceToPath = Mathf.Abs(x);
+                float mask = CalculateValleyMask(distanceToPath, flatRoadWidth, totalValleyWidth);
+
+                // Absolute value creates a V-shape valley centered at x = 0
+                map[i, j] = 0.9f - mask;
             }
         }
 
         return map;
     }
+    public static float CalculateValleyMask(float distanceToPath, float pathRadius, float valleyRadius) {
+        // 1. Calculate the linear falloff
+        // If distance < pathRadius, returns 0 (Flat Road)
+        // If distance > valleyRadius, returns 1 (Wild Mountains)
+        // If it's in between, it returns a decimal percentage.
+        float linearFalloff = Mathf.InverseLerp(pathRadius, valleyRadius, distanceToPath);
 
-    static float Evaluate(float value) {
-        float a = 3;
-        float b = 2.2f;
-        // desmos shi
-        return Mathf.Pow(value, a) / (Mathf.Pow(value, a) + Mathf.Pow(b - b * value, a));
-        // Simple linear falloff from 0 (high) to 1 (low)
-        // return value;
+        // 2. Apply S-Curve Smoothing
+        // This bends the straight ramp into a natural, curved valley wall
+        float smoothFalloff = Mathf.SmoothStep(0f, 1f, linearFalloff);
+
+        return smoothFalloff;
     }
 }

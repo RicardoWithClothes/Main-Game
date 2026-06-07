@@ -8,10 +8,10 @@ using Vector3 = UnityEngine.Vector3;
 public static class MeshGenerator {
 
     // converts raw height matrix to 3d mesh data.
-    public static MeshData GenerateTerrainMesh(float[,] heightMap, float heightMultiplier, AnimationCurve _heightCurve, int levelOfDetail, bool useFlatShading, bool useSlope, float slopeSteepness, Vector2 chunkCentre) {
+    public static MeshData GenerateTerrainMesh(TerrainPoint[,] terrainGrid, float heightMultiplier, AnimationCurve _heightCurve, int levelOfDetail, bool useFlatShading, bool useSlope, float slopeSteepness, Vector2 chunkCentre) {
         AnimationCurve heightCurve = new AnimationCurve (_heightCurve.keys);
         int meshSimplificationIncrement = (levelOfDetail == 0) ? 1 : levelOfDetail * 2;
-        int borderedSize = heightMap.GetLength(0);
+        int borderedSize = terrainGrid.GetLength(0);
         int meshSize = borderedSize - 2*meshSimplificationIncrement;
         int meshSizeUnsimplified = borderedSize - 2;
 
@@ -49,7 +49,7 @@ public static class MeshGenerator {
                 // calc vertex position
                 int vertexIndex = vertexIndicesMap[x, y];
                 Vector2 percent = new Vector2((x - meshSimplificationIncrement) / (float)meshSize, (y - meshSimplificationIncrement) / (float)meshSize);
-                float height = heightCurve.Evaluate(heightMap[x, y]) * heightMultiplier;
+                float height = heightCurve.Evaluate(terrainGrid[x, y].finalHeight) * heightMultiplier;
 
                 if (useSlope) {
                     // Calculate absolute world Z coordinate of this specific vertex
