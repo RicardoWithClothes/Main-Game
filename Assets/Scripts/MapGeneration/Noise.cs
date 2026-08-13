@@ -1,4 +1,5 @@
 using System.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 using UnityEngine.SocialPlatforms;
 
@@ -8,10 +9,9 @@ public static class Noise {
 
     public enum NormalizeMode { Local, Global };
 
-    public static TerrainPoint[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, NormalizeMode normalizeMode) {
+    public static TerrainPoint[,] GenerateNoiseMap(int mapWidth, int mapHeight, int seed, float scale, int octaves, float persistance, float lacunarity, Vector2 offset, NormalizeMode normalizeMode, float3[] bakedSpline, float roadWidth, float valleyWidth, float heightMultiplier) {
 
         float[,] noiseMap = new float[mapWidth, mapHeight];
-
         System.Random prng = new System.Random(seed);
         Vector2[] octaveOffsets = new Vector2[octaves];
 
@@ -28,9 +28,7 @@ public static class Noise {
             amplitude *= persistance;
         }
 
-        if (scale <= 0) {
-            scale = 0.0001f;
-        }
+        if (scale <= 0) scale = 0.0001f;
 
         float maxLocalNoiseHeight = float.MinValue;
         float minLocalNoiseHeight = float.MaxValue;
@@ -57,34 +55,59 @@ public static class Noise {
                     frequency *= lacunarity;
                 }
 
-                if (noiseHeight > maxLocalNoiseHeight) {
-                    maxLocalNoiseHeight = noiseHeight;
-                }
-                else if (noiseHeight < minLocalNoiseHeight) {
-                    minLocalNoiseHeight = noiseHeight;
-                }
+                if (noiseHeight > maxLocalNoiseHeight) maxLocalNoiseHeight = noiseHeight;
+                else if (noiseHeight < minLocalNoiseHeight) minLocalNoiseHeight = noiseHeight;
+
                 noiseMap[x, y] = noiseHeight;
             }
         }
-        // normalization noise map.
+        // normalization noise map. + spline calc CHECK THIS
         TerrainPoint[,] terrainGrid = new TerrainPoint[mapWidth, mapHeight];
+        bool hasSpline = bakedSpline != null && bakedSpline.Length > 0;
 
         for (int y = 0; y < mapHeight; y++) {
             for (int x = 0; x < mapWidth; x++) {
 
-                float normalizedHeight = 0f;
-                if (normalizeMode == NormalizeMode.Local) {
-                    normalizedHeight = Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap[x, y]);
+                float normalizedHeight = (normalizeMode == NormalizeMode.Local)
+                    ? Mathf.InverseLerp(minLocalNoiseHeight, maxLocalNoiseHeight, noiseMap[x, y])
+                    : Mathf.Clamp((noiseMap[x, y] + 1) / (maxPossibleHeight / 0.9f), 0, int.MaxValue);
+
+                // SPLINE PURE CHECK THIS TESTING
+                float finalH = normalizedHeight;
+                float pathInf = 0f;
+
+                if (hasSpline) {
+                    float worldX = offset.x + (x - halfWidth);
+                    float worldZ = offset.y + (halfHeight - y);
+                    float worldY = normalizedHeight * heightMultiplier;
+
+                    float3 queryPos = new float3(worldX, worldY, worldZ);
+
+                    // FIX 2: Fast Polyline Stick Distance Check
+                    float minDistanceSq = float.MaxValue;
+                    for (int s = 0; s < bakedSpline.Length; s++) {
+                        float distSq = math.distancesq(queryPos, bakedSpline[s]);
+                        if (distSq < minDistanceSq) {
+                            minDistanceSq = distSq;
+                        }
+                    }
+
+                    float trueDistance = math.sqrt(minDistanceSq);
+
+                    // Valley Mask Math
+                    float linearMask = Mathf.InverseLerp(roadWidth, valleyWidth, trueDistance);
+                    float smoothMask = Mathf.SmoothStep(0f, 1f, linearMask);
+
+
+                    finalH *= smoothMask;
+                    pathInf = 1f - smoothMask;
                 }
-                else {
-                    float rawNormalized = (noiseMap[x, y] + 1) / (maxPossibleHeight / 0.9f);
-                    normalizedHeight = Mathf.Clamp(rawNormalized, 0, int.MaxValue);
-                }
+
 
                 TerrainPoint point = new TerrainPoint();
                 point.baseNoiseHeight = normalizedHeight; // Store the raw mountain height
-                point.finalHeight = normalizedHeight;     // They start the same before carving
-                point.pathInfluence = 0f;                 // Default to no path nearby
+                point.finalHeight = finalH;
+                point.pathInfluence = pathInf;
 
                 terrainGrid[x, y] = point;
             }
