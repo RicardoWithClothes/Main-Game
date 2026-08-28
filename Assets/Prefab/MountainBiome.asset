@@ -10,32 +10,32 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: defe3d93665b2874f911d11f41208eb7, type: 3}
-  m_Name: Default
+  m_Name: MountainBiome
   m_EditorClassIdentifier: Assembly-CSharp::TerrainSettings
-  noiseScale: 37
-  octaves: 5
-  persistence: 0.588
-  lacunarity: 1.41
-  slopeSteepness: 0.1
-  meshHeightMultiplier: 50
+  noiseScale: 42.5
+  octaves: 4
+  persistence: 0.45
+  lacunarity: 1.56
+  slopeSteepness: 0
+  meshHeightMultiplier: 55.2
   meshHeightCurve:
     serializedVersion: 2
     m_Curve:
     - serializedVersion: 3
       time: 0
       value: 0
-      inSlope: 0
-      outSlope: 0
-      tangentMode: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
     - serializedVersion: 3
       time: 1
       value: 1
-      inSlope: 2
-      outSlope: 2
-      tangentMode: 0
+      inSlope: 1
+      outSlope: 1
+      tangentMode: 34
       weightedMode: 0
       inWeight: 0
       outWeight: 0
@@ -43,9 +43,12 @@ MonoBehaviour:
     m_PostInfinity: 2
     m_RotationOrder: 4
   regions:
-  - name: Sand
-    height: 0
-    colour: {r: 0.900803, g: 1, b: 0, a: 0}
-  - name: Grass
-    height: 0.4
-    colour: {r: 0, g: 0.5849056, b: 0.26119375, a: 0}
+  - name: Low Hill
+    height: 0.1
+    colour: {r: 0.41568628, g: 0.42352942, b: 0.41960785, a: 1}
+  - name: Peak
+    height: 0.5
+    colour: {r: 0.2735849, g: 0.2735849, b: 0.2735849, a: 1}
+  - name: Mid Hill
+    height: 0.9
+    colour: {r: 0.9150943, g: 0.9150943, b: 0.9150943, a: 0}

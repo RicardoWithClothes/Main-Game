@@ -18,7 +18,7 @@ public class MapGenerator : MonoBehaviour
     public DrawMode drawMode;
 
     [Header("Imports")]
-    public TerrainSettings terrainSettings;
+    public TerrainSettings DefaultterrainSettings;
     public SplineContainer testSpline;
 
     [Header("Spline / Path Settings")]
@@ -90,9 +90,9 @@ public class MapGenerator : MonoBehaviour
 
     public void DrawMapInEditor()
     {
-        if (terrainSettings == null) return;
+        if (DefaultterrainSettings == null) return;
 
-        TerrainSettingsData settingsData = terrainSettings.GetThreadSafeData();
+        TerrainSettingsData settingsData = DefaultterrainSettings.GetThreadSafeData();
         float3[] safeSpline = ExtractWorldSpaceSpline();
 
         MapData mapData = GenerateMapData(Vector2.zero, settingsData, safeSpline);
@@ -126,34 +126,33 @@ public class MapGenerator : MonoBehaviour
     }
 
     // the async map data threading
-    public void RequestMapData(Vector2 centre, Action<MapData> callback)
+    public void RequestMapData(Vector2 centre, TerrainSettingsData terrainSettingsData, Action<MapData> callback)
     {
-        TerrainSettingsData settingsData = terrainSettings.GetThreadSafeData();
         float3[] safeSpline = cachedSpline;
 
         ThreadStart threadStart = delegate
         {
-            MapDataThread(centre, settingsData, safeSpline, callback);
+            MapDataThread(centre, terrainSettingsData, safeSpline, callback);
         };
 
         new Thread(threadStart).Start();
     }
 
-    void MapDataThread(Vector2 centre, TerrainSettingsData settingsData, float3[] safeSpline, Action<MapData> callback)
+    void MapDataThread(Vector2 centre, TerrainSettingsData terrainSettingsData, float3[] safeSpline, Action<MapData> callback)
     {
-        MapData mapData = GenerateMapData(centre, settingsData, safeSpline);
+
+        MapData mapData = GenerateMapData(centre, terrainSettingsData, safeSpline);
         lock (mapDataThreadInfoQueue)
         {
             mapDataThreadInfoQueue.Enqueue(new MapThreadInfo<MapData>(callback, mapData));
         }
     }
 
-    public void RequestMeshData(MapData mapData, int lod, Action<MeshData> callback)
+    public void RequestMeshData(MapData mapData, int lod, TerrainSettingsData terrainSettingsData, Action<MeshData> callback)
     {
-        TerrainSettingsData settingsData = terrainSettings.GetThreadSafeData();
         ThreadStart threadStart = delegate
         {
-            MeshDataThread(mapData, lod, settingsData, callback);
+            MeshDataThread(mapData, lod, terrainSettingsData, callback);
         };
         new Thread(threadStart).Start();
     }
@@ -191,8 +190,7 @@ public class MapGenerator : MonoBehaviour
     {
         int currentChunkSize = mapChunkSize;
         TerrainPoint[,] terrainGrid = Noise.GenerateNoiseMap(
-            currentChunkSize + 2, currentChunkSize + 2, seed, settings.noiseScale, settings.octaves,
-            settings.persistence, settings.lacunarity, centre + offset, normalizeMode,
+            currentChunkSize + 2, currentChunkSize + 2, seed, settings, centre + offset, normalizeMode,
             safeSpline, roadWidth, valleyWidth, pathDepression
         );
 
@@ -246,11 +244,11 @@ public class MapGenerator : MonoBehaviour
     void OnValidate()
     {
         // 4. Subscribe the listener to the TerrainSettings event
-        if (terrainSettings != null)
+        if (DefaultterrainSettings != null)
         {
             // Unsubscribe first to ensure we don't accidentally subscribe multiple times
-            terrainSettings.OnValuesUpdated -= OnTerrainSettingsUpdated;
-            terrainSettings.OnValuesUpdated += OnTerrainSettingsUpdated;
+            DefaultterrainSettings.OnValuesUpdated -= OnTerrainSettingsUpdated;
+            DefaultterrainSettings.OnValuesUpdated += OnTerrainSettingsUpdated;
         }
 
     }

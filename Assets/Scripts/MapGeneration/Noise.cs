@@ -10,10 +10,15 @@ public static class Noise
     public enum NormalizeMode { Local, Global };
 
     public static TerrainPoint[,] GenerateNoiseMap(int mapWidth, int mapHeight,
-    int seed, float scale, int octaves, float persistance, float lacunarity,
+    int seed, TerrainSettingsData settings,
     Vector2 offset, NormalizeMode normalizeMode, float3[] bakedSpline,
     float roadWidth, float valleyWidth, float pathDepression, float meshWorldScale = 2f)
     {
+        int octaves = settings.octaves;
+        float scale = settings.noiseScale;
+        float persistance = settings.persistence;
+        float lacunarity = settings.lacunarity;
+
         float[,] noiseMap = new float[mapWidth, mapHeight];
         System.Random prng = new System.Random(seed);
         Vector2[] octaveOffsets = new Vector2[octaves];
