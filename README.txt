@@ -7,4 +7,4 @@ Spline based path gen
 Better cycling system
 Visual upgrade
 Weather system
-![Yeah man](https://imgur.com/a/BhxHYzJ)
+![Yeah man]("Assets\misc\Screenshot 2026-08-27 235148.png")
