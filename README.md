@@ -5,7 +5,7 @@
 * [x] Mesh with different terrain settings *(Moved back)*
 * [ ] **Visual integration <— (Here RN)**
 
-<img src="Assets/misc/Screenshot_2026-08-27_235148.png" alt="wow">
+<img src="Assets/misc/Screenshot 2026-08-27 235148.png" alt="wow">
 
 * [ ] Biome system
 * [ ] Spline-based path gen
